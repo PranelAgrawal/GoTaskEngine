@@ -1,0 +1,28 @@
+# Binaries for programs and plugins
+*.exe
+*.exe;
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+bin/
+engine
+
+# Test binaries & coverage
+*.cover
+coverage.txt
+coverage.out
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Local environment & temporary build files
+.env
+.env.local
+tmp/
