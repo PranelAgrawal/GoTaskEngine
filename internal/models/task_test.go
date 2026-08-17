@@ -43,7 +43,7 @@ func TestTask_IsDueAndBackoff(t *testing.T) {
 		ID:         "task-due",
 		TenantID:   "tenant-1",
 		Action:     "action",
-		ExecuteAt:  now.Add(-100 * time.Millisecond),
+		ExecuteAt:  now.Add(-100 * time.Millisecond), // 100 ms in the past of current time
 		MaxRetries: 3,
 		RetryCount: 1,
 	}
@@ -60,5 +60,20 @@ func TestTask_IsDueAndBackoff(t *testing.T) {
 	backoff := task.NextBackoff(1 * time.Second)
 	if backoff != 2*time.Second {
 		t.Fatalf("expected 2s backoff, got %v", backoff)
+	}
+}
+
+func TestTask_MaxBackoffCap(t *testing.T) {
+	// High retry count (2^30 seconds would be ~34 years), should cap at 1 hour
+	task := &models.Task{
+		ID:         "task-overflow",
+		TenantID:   "tenant-1",
+		Action:     "action",
+		RetryCount: 30,
+	}
+
+	backoff := task.NextBackoff(1 * time.Second)
+	if backoff != 1*time.Hour {
+		t.Fatalf("expected backoff capped at 1h, got %v", backoff)
 	}
 }
