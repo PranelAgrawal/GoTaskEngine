@@ -48,7 +48,7 @@ func TestTask_IsDueAndBackoff(t *testing.T) {
 		RetryCount: 1,
 	}
 
-	if !task.IsDue(now) {
+	if !task.IsDue(now) { // since the task has already passed its execution time, the function inside task.go return true, which is then negated by !, so it becomes false.
 		t.Fatal("expected task with past ExecuteAt to be due")
 	}
 
@@ -57,8 +57,8 @@ func TestTask_IsDueAndBackoff(t *testing.T) {
 	}
 
 	// RetryCount = 1 -> Backoff should be baseDelay * 2^1 = 2 * baseDelay
-	backoff := task.NextBackoff(1 * time.Second)
-	if backoff != 2*time.Second {
+	backoff := task.NextBackoff(1 * time.Second) // time.Second is simply 1s
+	if backoff != 2*time.Second {                // since hardcoded it just checks whether i receive 2 or not
 		t.Fatalf("expected 2s backoff, got %v", backoff)
 	}
 }
