@@ -20,9 +20,9 @@ const (
 
 // Common model validation errors.
 var (
-	ErrInvalidTaskID   = errors.New("task ID cannot be empty")
-	ErrInvalidTenantID = errors.New("tenant ID cannot be empty")
-	ErrInvalidAction   = errors.New("task action cannot be empty")
+	ErrInvalidTaskID    = errors.New("task ID cannot be empty")
+	ErrInvalidTenantID  = errors.New("tenant ID cannot be empty")
+	ErrInvalidAction    = errors.New("task action cannot be empty")
 	ErrNegativeMaxRetry = errors.New("max_retries cannot be negative")
 )
 
@@ -62,7 +62,7 @@ func (t *Task) Validate() error {
 
 // IsDue reports whether the task's scheduled execution time is at or before the given target time.
 func (t *Task) IsDue(target time.Time) bool {
-	return !t.ExecuteAt.After(target)
+	return !t.ExecuteAt.After(target) // executeAt.After() returns true if executeAt is strictly in the future compared to target
 }
 
 // CanRetry determines if the task is eligible for another execution retry based on MaxRetries.
